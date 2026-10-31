@@ -203,13 +203,13 @@ export const SetupView: React.FC<SetupViewProps> = ({
               />
             </div>
 
-            {/* NEW REQUIRED FIELD: GAME TYPE SELECTION (Section 1) */}
+            {/* GAME TYPE SELECTION (4 Types) */}
             <div>
               <label className="block text-xs font-medium text-zinc-300 mb-2">
                 Milyen típusú játék? <span className="text-red-400">*</span>
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {/* Option A: Full Team Game */}
+                {/* Option 1: Full Team Game */}
                 <div
                   onClick={() => setGameType('TEAM')}
                   className={`p-3 rounded-xl border cursor-pointer transition-all ${
@@ -227,7 +227,7 @@ export const SetupView: React.FC<SetupViewProps> = ({
                   </p>
                 </div>
 
-                {/* Option B: Individual Duel */}
+                {/* Option 2: Individual Duel */}
                 <div
                   onClick={() => setGameType('DUEL')}
                   className={`p-3 rounded-xl border cursor-pointer transition-all ${
@@ -242,6 +242,42 @@ export const SetupView: React.FC<SetupViewProps> = ({
                   </div>
                   <p className="text-[11px] leading-snug opacity-85">
                     1 vs 1 küzdelem 4 párbajban. Minden csapattag pontosan 1 párbajt vív.
+                  </p>
+                </div>
+
+                {/* Option 3: Puzzle Race */}
+                <div
+                  onClick={() => setGameType('PUZZLE')}
+                  className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                    gameType === 'PUZZLE'
+                      ? 'bg-cyan-950/40 border-cyan-500 text-cyan-200 ring-1 ring-cyan-500/60 shadow-md'
+                      : 'bg-zinc-900/70 border-zinc-800 text-zinc-400 hover:border-zinc-700'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-sm">🧩</span>
+                    <span className="text-xs font-bold font-cinzel">🧩 PUZZLE-VERSENY</span>
+                  </div>
+                  <p className="text-[11px] leading-snug opacity-85">
+                    Párhuzamos csapatverseny közös indítással és független stopperekkel.
+                  </p>
+                </div>
+
+                {/* Option 4: Pumpkin Carving */}
+                <div
+                  onClick={() => setGameType('PUMPKIN')}
+                  className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                    gameType === 'PUMPKIN'
+                      ? 'bg-amber-950/40 border-amber-500 text-amber-200 ring-1 ring-amber-500/60 shadow-md'
+                      : 'bg-zinc-900/70 border-zinc-800 text-zinc-400 hover:border-zinc-700'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-sm">🎃</span>
+                    <span className="text-xs font-bold font-cinzel">🎃 TÖKFARAGÓ VERSENY</span>
+                  </div>
+                  <p className="text-[11px] leading-snug opacity-85">
+                    A csapatok 2-2 párra oszlanak, mind a 4 pár egyszerre farag közös értékeléssel.
                   </p>
                 </div>
               </div>
@@ -309,12 +345,22 @@ export const SetupView: React.FC<SetupViewProps> = ({
                         {/* Game Type Badge */}
                         <span
                           className={`text-[10px] font-mono px-2 py-0.5 rounded-md font-bold ${
-                            game.gameType === 'TEAM'
+                            game.gameType === 'PUZZLE'
+                              ? 'bg-cyan-950/70 border border-cyan-500/40 text-cyan-300'
+                              : game.gameType === 'PUMPKIN'
+                              ? 'bg-amber-950/70 border border-amber-500/40 text-amber-300'
+                              : game.gameType === 'TEAM'
                               ? 'bg-purple-950/70 border border-purple-500/40 text-purple-300'
                               : 'bg-orange-950/70 border border-orange-500/40 text-orange-300'
                           }`}
                         >
-                          {game.gameType === 'TEAM' ? '👥 TELJES CSAPATOS' : '⚔️ EGYÉNI PÁRBAJ'}
+                          {game.gameType === 'PUZZLE'
+                            ? '🧩 PUZZLE-VERSENY'
+                            : game.gameType === 'PUMPKIN'
+                            ? '🎃 TÖKFARAGÓ VERSENY'
+                            : game.gameType === 'TEAM'
+                            ? '👥 TELJES CSAPATOS'
+                            : '⚔️ EGYÉNI PÁRBAJ'}
                         </span>
                       </div>
                       {game.description && (

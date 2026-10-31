@@ -10,7 +10,10 @@ import {
   calculateAllStats,
   generateFourDuels,
   generateTeamMatch,
+  generatePuzzleMatch,
+  generatePumpkinMatch,
 } from './utils/calculations';
+import { PumpkinPair } from './types/game';
 import { soundEngine } from './utils/sound';
 import { BackgroundAtmosphere } from './components/BackgroundAtmosphere';
 import { HeaderNav } from './components/HeaderNav';
@@ -133,35 +136,43 @@ export default function App() {
       },
       {
         id: 'sample_g2',
-        name: 'Szellemvadászat Szívószállal',
-        description: '1v1 párbaj: Szívószállal beszívva kell áthelyezni minél több papírszellemet egy tálból a másikba.',
+        name: 'Halloween Puzzle Hajsza',
+        description: 'Párhuzamos csapatverseny: Mindkét csapat egyszerre rakja a kísérteties puzzle-t. Külön stopperek mérik az időt!',
         status: 'NOT_PLAYED',
-        gameType: 'DUEL',
+        gameType: 'PUZZLE',
         order: 2,
       },
       {
         id: 'sample_g3',
-        name: 'Vámpírfogó Pingpong',
-        description: '1v1 párbaj: Műanyag vámpírfogsorral kell elkapni és célba juttatni minél több labdát kézhasználat nélkül.',
+        name: 'Dísztök Faragó Bajnokság',
+        description: '4 pár egyszerre farag: A és B csapat 2-2 párja 30 perc alatt faragja meg a legszebb halloweeni töklámpást.',
         status: 'NOT_PLAYED',
-        gameType: 'DUEL',
+        gameType: 'PUMPKIN',
         order: 3,
       },
       {
         id: 'sample_g4',
-        name: 'Pókverseny Fújással',
-        description: 'Teljes csapat: A 4 játékos egyszerre fújja a műanyag pókokat a célvonalig a megadott idő alatt.',
+        name: 'Szellemvadászat Szívószállal',
+        description: '1v1 párbaj: Szívószállal beszívva kell áthelyezni minél több papírszellemet egy tálból a másikba.',
         status: 'NOT_PLAYED',
-        gameType: 'TEAM',
+        gameType: 'DUEL',
         order: 4,
       },
       {
         id: 'sample_g5',
-        name: 'Boszorkánykalap Karikadobó',
-        description: '1v1 párbaj: Világító foszforeszkáló karikákkal kell célba találni a boszorkánykalapok hegyére.',
+        name: 'Vámpírfogó Pingpong',
+        description: '1v1 párbaj: Műanyag vámpírfogsorral kell elkapni és célba juttatni minél több labdát kézhasználat nélkül.',
         status: 'NOT_PLAYED',
         gameType: 'DUEL',
         order: 5,
+      },
+      {
+        id: 'sample_g6',
+        name: 'Pókverseny Fújással',
+        description: 'Teljes csapat: A 4 játékos egyszerre fújja a műanyag pókokat a célvonalig a megadott idő alatt.',
+        status: 'NOT_PLAYED',
+        gameType: 'TEAM',
+        order: 6,
       },
     ];
 
@@ -213,11 +224,17 @@ export default function App() {
     setState((prev) => {
       const selectedGame = prev.games.find((g) => g.id === gameId);
       const isTeam = selectedGame?.gameType === 'TEAM';
+      const isPuzzle = selectedGame?.gameType === 'PUZZLE';
+      const isPumpkin = selectedGame?.gameType === 'PUMPKIN';
 
       let match = prev.matches[gameId];
       if (!match) {
         if (isTeam) {
           match = generateTeamMatch(gameId);
+        } else if (isPuzzle) {
+          match = generatePuzzleMatch(gameId, selectedGame?.puzzleSettings);
+        } else if (isPumpkin) {
+          match = generatePumpkinMatch(gameId, prev.players, selectedGame?.pumpkinSettings);
         } else {
           match = generateFourDuels(gameId, prev.players);
         }
@@ -471,6 +488,115 @@ export default function App() {
   };
 
   // ----------------------------------------------------
+  // PUZZLE & PUMPKIN MATCH HANDLERS
+  // ----------------------------------------------------
+  const handleUpdateMatchData = (updatedMatch: GameMatch) => {
+    setState((prev) => ({
+      ...prev,
+      matches: {
+        ...prev.matches,
+        [updatedMatch.gameId]: updatedMatch,
+      },
+    }));
+  };
+
+  const handleFinalizePuzzle = (
+    scoreA: number,
+    scoreB: number,
+    winnerTeam: 'A' | 'B' | 'DRAW',
+    timeA: number,
+    timeB: number
+  ) => {
+    if (!state.currentGameId) return;
+    const gameId = state.currentGameId;
+    setState((prev) => {
+      const match = prev.matches[gameId];
+      if (!match || !match.puzzleData) return prev;
+
+      const updatedMatch: GameMatch = {
+        ...match,
+        totalScoreA: scoreA,
+        totalScoreB: scoreB,
+        winnerTeam,
+        completed: true,
+        completedAt: Date.now(),
+        puzzleData: {
+          ...match.puzzleData,
+          scoreA,
+          scoreB,
+          winnerTeam,
+          teamAFinished: true,
+          teamAElapsedSeconds: timeA,
+          teamBFinished: true,
+          teamBElapsedSeconds: timeB,
+          evaluationFinalized: true,
+          timerRunning: false,
+          isPaused: true,
+        },
+      };
+
+      const updatedGames = prev.games.map((g) =>
+        g.id === gameId ? { ...g, status: 'COMPLETED' as const } : g
+      );
+
+      return {
+        ...prev,
+        games: updatedGames,
+        matches: {
+          ...prev.matches,
+          [gameId]: updatedMatch,
+        },
+      };
+    });
+  };
+
+  const handleFinalizePumpkin = (
+    scoreA: number,
+    scoreB: number,
+    winnerTeam: 'A' | 'B' | 'DRAW',
+    pairs: PumpkinPair[]
+  ) => {
+    if (!state.currentGameId) return;
+    const gameId = state.currentGameId;
+    setState((prev) => {
+      const match = prev.matches[gameId];
+      if (!match || !match.pumpkinData) return prev;
+
+      const updatedMatch: GameMatch = {
+        ...match,
+        totalScoreA: scoreA,
+        totalScoreB: scoreB,
+        winnerTeam,
+        completed: true,
+        completedAt: Date.now(),
+        pumpkinData: {
+          ...match.pumpkinData,
+          scoreA,
+          scoreB,
+          winnerTeam,
+          pairs,
+          evaluationFinalized: true,
+          timerRunning: false,
+          isPaused: true,
+        },
+      };
+
+      const updatedGames = prev.games.map((g) =>
+        g.id === gameId ? { ...g, status: 'COMPLETED' as const } : g
+      );
+
+      return {
+        ...prev,
+        games: updatedGames,
+        matches: {
+          ...prev.matches,
+          [gameId]: updatedMatch,
+        },
+      };
+    });
+  };
+
+  // ----------------------------------------------------
   // SETTINGS & RESET
   // ----------------------------------------------------
   const handleUpdateSettings = (newSettings: Partial<AppState['settings']>) => {
@@ -587,6 +713,9 @@ export default function App() {
                 onSkipGame={handleSkipGame}
                 onSaveDuelScore={handleSaveDuelScore}
                 onSaveTeamRoundScore={handleSaveTeamRoundScore}
+                onUpdateMatchData={handleUpdateMatchData}
+                onFinalizePuzzle={handleFinalizePuzzle}
+                onFinalizePumpkin={handleFinalizePumpkin}
                 onOpenHallOfFame={handleRequestHallOfFame}
                 onOpenProjector={() => setState((prev) => ({ ...prev, isProjectorOpen: true }))}
               />

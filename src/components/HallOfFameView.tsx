@@ -343,6 +343,72 @@ export const HallOfFameView: React.FC<HallOfFameViewProps> = ({
               </span>
             </div>
           </div>
+
+          {/* AWARD 6: LEGGYORSABB PUZZLE MESTEREK (If played) */}
+          {awards.fastestPuzzle && (
+            <div className="p-6 rounded-2xl bg-[#14101A] border border-cyan-500/50 shadow-xl flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-xl mb-4">
+                  🧩
+                </div>
+                <span className="text-[10px] uppercase font-mono tracking-wider text-cyan-400 block">
+                  KÜLÖNDÍJ
+                </span>
+                <h3 className="text-lg font-bold font-cinzel text-white">
+                  A Leggyorsabb Puzzle Mesterek
+                </h3>
+                <p className="text-xs text-zinc-400 mt-1">
+                  A legrövidebb idő alatt kirakott puzzle csapata.
+                </p>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-zinc-800 text-center">
+                <span className="text-lg font-bold font-cinzel text-cyan-300 block">
+                  {awards.fastestPuzzle.winningTeamName}
+                </span>
+                <span className="text-sm text-zinc-300 font-mono mt-1 block font-bold">
+                  ⏱️ {awards.fastestPuzzle.timeSeconds} másodperc
+                </span>
+                <span className="text-[11px] text-zinc-500 font-mono mt-0.5 block truncate">
+                  ({awards.fastestPuzzle.gameName})
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* AWARD 7: AZ ARANY TÖKLÁMPÁS DÍJ (If played) */}
+          {awards.bestPumpkinCarver && (
+            <div className="p-6 rounded-2xl bg-[#14101A] border border-amber-500/50 shadow-xl flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-xl mb-4">
+                  🎃
+                </div>
+                <span className="text-[10px] uppercase font-mono tracking-wider text-amber-400 block">
+                  KÜLÖNDÍJ
+                </span>
+                <h3 className="text-lg font-bold font-cinzel text-white">
+                  Az Arany Töklámpás Bajnokai
+                </h3>
+                <p className="text-xs text-zinc-400 mt-1">
+                  A tökfaragó verseny 1. helyezettje (legszebb tök).
+                </p>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-zinc-800 text-center">
+                <span className="text-lg font-bold font-cinzel text-amber-300 block">
+                  {awards.bestPumpkinCarver.pairNames.join(' & ')}
+                </span>
+                <span className="text-xs text-orange-400 font-mono mt-1 block">
+                  {awards.bestPumpkinCarver.teamName} · {awards.bestPumpkinCarver.score} pont
+                </span>
+                <span className="text-[11px] text-zinc-500 font-mono mt-0.5 block truncate">
+                  ({awards.bestPumpkinCarver.gameName})
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

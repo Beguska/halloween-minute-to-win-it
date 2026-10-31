@@ -56,7 +56,9 @@ export const GameHistoryView: React.FC<GameHistoryViewProps> = ({
       m.completed ||
       (m.duels && m.duels.some((d) => d.completed)) ||
       m.teamRoundA?.completed ||
-      m.teamRoundB?.completed
+      m.teamRoundB?.completed ||
+      m.puzzleData?.evaluationFinalized ||
+      m.pumpkinData?.evaluationFinalized
   );
 
   const toggleExpand = (gameId: string) => {
@@ -160,12 +162,22 @@ export const GameHistoryView: React.FC<GameHistoryViewProps> = ({
                         </span>
                         <span
                           className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${
-                            isTeam
+                            match.gameType === 'PUZZLE'
+                              ? 'bg-cyan-950/70 border border-cyan-500/40 text-cyan-300'
+                              : match.gameType === 'PUMPKIN'
+                              ? 'bg-amber-950/70 border border-amber-500/40 text-amber-300'
+                              : isTeam
                               ? 'bg-purple-950/70 border border-purple-500/40 text-purple-300'
                               : 'bg-orange-950/70 border border-orange-500/40 text-orange-300'
                           }`}
                         >
-                          {isTeam ? '👥 TELJES CSAPATOS' : '⚔️ EGYÉNI PÁRBAJ'}
+                          {match.gameType === 'PUZZLE'
+                            ? '🧩 PUZZLE-VERSENY'
+                            : match.gameType === 'PUMPKIN'
+                            ? '🎃 TÖKFARAGÓ VERSENY'
+                            : isTeam
+                            ? '👥 TELJES CSAPATOS'
+                            : '⚔️ EGYÉNI PÁRBAJ'}
                         </span>
                       </div>
                       <h3 className="text-base md:text-lg font-bold text-white font-cinzel">
@@ -213,8 +225,211 @@ export const GameHistoryView: React.FC<GameHistoryViewProps> = ({
                 {/* Expanded Details */}
                 {isExpanded && (
                   <div className="px-5 pb-5 pt-2 border-t border-zinc-800/80 bg-black/20 space-y-3">
-                    {/* TELJES CSAPATOS Details */}
-                    {isTeam ? (
+                    {/* PUZZLE-VERSENY Details */}
+                    {match.gameType === 'PUZZLE' ? (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-xs font-mono text-cyan-400 tracking-wider">
+                          <span>🧩 PUZZLE IDŐEREDMÉNYEK ÉS CSAPATPONTOK:</span>
+                          <button
+                            onClick={() =>
+                              handleStartEditTeamMatch(
+                                match.gameId,
+                                match.totalScoreA,
+                                match.totalScoreB
+                              )
+                            }
+                            className="flex items-center gap-1 text-[11px] text-zinc-400 hover:text-cyan-400"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                            <span>Pontok szerkesztése</span>
+                          </button>
+                        </div>
+
+                        {editingTeamMatch?.gameId === match.gameId ? (
+                          <div className="p-4 rounded-xl bg-zinc-900 border border-cyan-500 flex flex-wrap items-center justify-between gap-4">
+                            <div className="flex items-center gap-4 text-xs font-mono">
+                              <div>
+                                <span className="block text-orange-400 font-bold mb-1">{teamA.name} pont:</span>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={editingTeamMatch.scoreA}
+                                  onChange={(e) =>
+                                    setEditingTeamMatch({
+                                      ...editingTeamMatch,
+                                      scoreA: Math.max(0, parseInt(e.target.value) || 0),
+                                    })
+                                  }
+                                  className="w-20 px-2 py-1 rounded bg-black border border-orange-500 text-white font-mono font-bold text-center"
+                                />
+                              </div>
+                              <div>
+                                <span className="block text-purple-400 font-bold mb-1">{teamB.name} pont:</span>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={editingTeamMatch.scoreB}
+                                  onChange={(e) =>
+                                    setEditingTeamMatch({
+                                      ...editingTeamMatch,
+                                      scoreB: Math.max(0, parseInt(e.target.value) || 0),
+                                    })
+                                  }
+                                  className="w-20 px-2 py-1 rounded bg-black border border-purple-500 text-white font-mono font-bold text-center"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="flex gap-2">
+                              <button
+                                onClick={handleSaveEditedTeamMatch}
+                                className="px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1"
+                              >
+                                <Check className="w-3.5 h-3.5" />
+                                <span>Mentés</span>
+                              </button>
+                              <button
+                                onClick={() => setEditingTeamMatch(null)}
+                                className="px-3 py-1.5 rounded bg-zinc-800 text-zinc-300 text-xs"
+                              >
+                                Mégse
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="p-3.5 rounded-xl bg-zinc-900/60 border border-orange-500/30">
+                              <span className="text-[10px] text-orange-400 uppercase font-mono block font-bold">
+                                {teamA.name}
+                              </span>
+                              <div className="text-xs text-zinc-300 font-mono mt-1">
+                                Rögzített idő: {match.puzzleData?.teamAElapsedSeconds ? `${match.puzzleData.teamAElapsedSeconds}s` : 'N/A'}
+                              </div>
+                              <div className="text-base font-bold text-white font-mono mt-0.5">
+                                Pontszám: {match.totalScoreA} pont
+                              </div>
+                            </div>
+
+                            <div className="p-3.5 rounded-xl bg-zinc-900/60 border border-purple-500/30">
+                              <span className="text-[10px] text-purple-400 uppercase font-mono block font-bold">
+                                {teamB.name}
+                              </span>
+                              <div className="text-xs text-zinc-300 font-mono mt-1">
+                                Rögzített idő: {match.puzzleData?.teamBElapsedSeconds ? `${match.puzzleData.teamBElapsedSeconds}s` : 'N/A'}
+                              </div>
+                              <div className="text-base font-bold text-white font-mono mt-0.5">
+                                Pontszám: {match.totalScoreB} pont
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : match.gameType === 'PUMPKIN' ? (
+                      /* TÖKFARAGÓ VERSENY Details */
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-xs font-mono text-amber-400 tracking-wider">
+                          <span>🎃 TÖKFARAGÓ PÁROK ÉS PONTOK:</span>
+                          <button
+                            onClick={() =>
+                              handleStartEditTeamMatch(
+                                match.gameId,
+                                match.totalScoreA,
+                                match.totalScoreB
+                              )
+                            }
+                            className="flex items-center gap-1 text-[11px] text-zinc-400 hover:text-amber-400"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                            <span>Csapatpontok szerkesztése</span>
+                          </button>
+                        </div>
+
+                        {editingTeamMatch?.gameId === match.gameId ? (
+                          <div className="p-4 rounded-xl bg-zinc-900 border border-amber-500 flex flex-wrap items-center justify-between gap-4">
+                            <div className="flex items-center gap-4 text-xs font-mono">
+                              <div>
+                                <span className="block text-orange-400 font-bold mb-1">{teamA.name} pont:</span>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={editingTeamMatch.scoreA}
+                                  onChange={(e) =>
+                                    setEditingTeamMatch({
+                                      ...editingTeamMatch,
+                                      scoreA: Math.max(0, parseInt(e.target.value) || 0),
+                                    })
+                                  }
+                                  className="w-20 px-2 py-1 rounded bg-black border border-orange-500 text-white font-mono font-bold text-center"
+                                />
+                              </div>
+                              <div>
+                                <span className="block text-purple-400 font-bold mb-1">{teamB.name} pont:</span>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={editingTeamMatch.scoreB}
+                                  onChange={(e) =>
+                                    setEditingTeamMatch({
+                                      ...editingTeamMatch,
+                                      scoreB: Math.max(0, parseInt(e.target.value) || 0),
+                                    })
+                                  }
+                                  className="w-20 px-2 py-1 rounded bg-black border border-purple-500 text-white font-mono font-bold text-center"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="flex gap-2">
+                              <button
+                                onClick={handleSaveEditedTeamMatch}
+                                className="px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1"
+                              >
+                                <Check className="w-3.5 h-3.5" />
+                                <span>Mentés</span>
+                              </button>
+                              <button
+                                onClick={() => setEditingTeamMatch(null)}
+                                className="px-3 py-1.5 rounded bg-zinc-800 text-zinc-300 text-xs"
+                              >
+                                Mégse
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                            {(match.pumpkinData?.pairs || []).map((pair) => {
+                              const isTeamA = pair.team === 'A';
+                              const p1 = playerMap.get(pair.playerIds[0]);
+                              const p2 = playerMap.get(pair.playerIds[1]);
+                              return (
+                                <div
+                                  key={pair.id}
+                                  className={`p-3 rounded-xl border text-xs ${
+                                    isTeamA
+                                      ? 'bg-orange-950/20 border-orange-500/30'
+                                      : 'bg-purple-950/20 border-purple-500/30'
+                                  }`}
+                                >
+                                  <span
+                                    className={`text-[10px] font-mono font-bold uppercase block ${
+                                      isTeamA ? 'text-orange-400' : 'text-purple-400'
+                                    }`}
+                                  >
+                                    {isTeamA ? teamA.name : teamB.name} · {pair.pairNumber}. pár
+                                  </span>
+                                  <div className="text-zinc-200 font-semibold my-1">
+                                    {p1?.name} & {p2?.name}
+                                  </div>
+                                  <div className="text-amber-400 font-bold font-mono">
+                                    {pair.rank ? `${pair.rank}. hely` : ''} · {pair.score} pont
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    ) : isTeam ? (
                       <div className="space-y-3">
                         <div className="text-xs uppercase font-mono text-zinc-400 tracking-wider">
                           Csapatkörök pontszámai:

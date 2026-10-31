@@ -185,7 +185,7 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
             </div>
 
             {/* If TELJES CSAPATOS: Show 4 members of the active team */}
-            {isTeamGame ? (
+            {currentGame.gameType === 'TEAM' && (
               <div className="my-4">
                 <span className="text-xs font-mono uppercase tracking-wider text-purple-400 block mb-2">
                   Aktív Csapat Versenyzői:
@@ -204,29 +204,140 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
                   ))}
                 </div>
               </div>
-            ) : (
-              /* If EGYÉNI PÁRBAJ: Show Duelists */
-              activeDuel && (
-                <div className="flex items-center justify-center gap-8 md:gap-16 my-4">
-                  <div className="text-right">
-                    <span className="text-xs font-mono uppercase text-orange-400 block">{teamA.name}</span>
-                    <span className="text-3xl md:text-5xl font-extrabold font-cinzel text-white block">
-                      {playerA?.name || 'A Játékos'}
+            )}
+
+            {/* If PUZZLE-VERSENY: Show both teams stopwatches side by side */}
+            {currentGame.gameType === 'PUZZLE' && (
+              <div className="my-4">
+                <div className="grid grid-cols-2 gap-8 max-w-4xl mx-auto">
+                  {/* Team A Puzzle Status */}
+                  <div className="p-6 rounded-2xl bg-zinc-900/90 border-2 border-orange-500/40 text-center">
+                    <span className="text-xs font-mono uppercase tracking-widest text-orange-400 block mb-1">
+                      {teamA.name}
                     </span>
+                    <div className="text-5xl md:text-6xl font-black font-mono text-white tabular-nums my-2">
+                      {currentMatch?.puzzleData?.teamAFinished
+                        ? `${Math.floor((currentMatch.puzzleData.teamAElapsedSeconds ?? 0) / 60)
+                            .toString()
+                            .padStart(2, '0')}:${Math.floor(
+                            (currentMatch.puzzleData.teamAElapsedSeconds ?? 0) % 60
+                          )
+                            .toString()
+                            .padStart(2, '0')}.${Math.floor(
+                            ((currentMatch.puzzleData.teamAElapsedSeconds ?? 0) * 10) % 10
+                          )}`
+                        : currentMatch?.puzzleData?.timerRunning
+                        ? 'FUT...'
+                        : '00:00.0'}
+                    </div>
+                    <div className="text-xs font-mono font-bold">
+                      {currentMatch?.puzzleData?.teamAFinished ? (
+                        <span className="text-emerald-400">✓ KÉSZ</span>
+                      ) : currentMatch?.puzzleData?.timerRunning ? (
+                        <span className="text-orange-400 animate-pulse">⏳ VERSENYBEN</span>
+                      ) : (
+                        <span className="text-zinc-500">VÁRAKOZIK</span>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="text-2xl md:text-3xl font-black font-cinzel text-amber-400 px-4 py-2 rounded-2xl bg-zinc-900 border border-amber-500/30">
-                    VS
-                  </div>
-
-                  <div className="text-left">
-                    <span className="text-xs font-mono uppercase text-purple-400 block">{teamB.name}</span>
-                    <span className="text-3xl md:text-5xl font-extrabold font-cinzel text-white block">
-                      {playerB?.name || 'B Játékos'}
+                  {/* Team B Puzzle Status */}
+                  <div className="p-6 rounded-2xl bg-zinc-900/90 border-2 border-purple-500/40 text-center">
+                    <span className="text-xs font-mono uppercase tracking-widest text-purple-400 block mb-1">
+                      {teamB.name}
                     </span>
+                    <div className="text-5xl md:text-6xl font-black font-mono text-white tabular-nums my-2">
+                      {currentMatch?.puzzleData?.teamBFinished
+                        ? `${Math.floor((currentMatch.puzzleData.teamBElapsedSeconds ?? 0) / 60)
+                            .toString()
+                            .padStart(2, '0')}:${Math.floor(
+                            (currentMatch.puzzleData.teamBElapsedSeconds ?? 0) % 60
+                          )
+                            .toString()
+                            .padStart(2, '0')}.${Math.floor(
+                            ((currentMatch.puzzleData.teamBElapsedSeconds ?? 0) * 10) % 10
+                          )}`
+                        : currentMatch?.puzzleData?.timerRunning
+                        ? 'FUT...'
+                        : '00:00.0'}
+                    </div>
+                    <div className="text-xs font-mono font-bold">
+                      {currentMatch?.puzzleData?.teamBFinished ? (
+                        <span className="text-emerald-400">✓ KÉSZ</span>
+                      ) : currentMatch?.puzzleData?.timerRunning ? (
+                        <span className="text-purple-400 animate-pulse">⏳ VERSENYBEN</span>
+                      ) : (
+                        <span className="text-zinc-500">VÁRAKOZIK</span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              )
+              </div>
+            )}
+
+            {/* If TÖKFARAGÓ VERSENY: Show all 4 pairs */}
+            {currentGame.gameType === 'PUMPKIN' && (
+              <div className="my-4">
+                <span className="text-xs font-mono uppercase tracking-wider text-amber-400 block mb-3">
+                  🎃 4 Faragó Pár Egyidejű Küzdelme:
+                </span>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                  {currentMatch?.pumpkinData?.pairs.map((pair) => {
+                    const isTeamA = pair.team === 'A';
+                    const p1 = playerMap.get(pair.playerIds[0]);
+                    const p2 = playerMap.get(pair.playerIds[1]);
+                    return (
+                      <div
+                        key={pair.id}
+                        className={`p-4 rounded-2xl border ${
+                          isTeamA
+                            ? 'bg-orange-950/30 border-orange-500/40'
+                            : 'bg-purple-950/30 border-purple-500/40'
+                        }`}
+                      >
+                        <span
+                          className={`text-[10px] font-mono uppercase font-bold block ${
+                            isTeamA ? 'text-orange-400' : 'text-purple-400'
+                          }`}
+                        >
+                          {isTeamA ? teamA.name : teamB.name} · {pair.pairNumber}. pár
+                        </span>
+                        <div className="text-sm font-bold text-white mt-1">
+                          {p1?.name} & {p2?.name}
+                        </div>
+                        {pair.rank && (
+                          <div className="text-xs font-bold text-amber-400 mt-2">
+                            {pair.rank}. hely · {pair.score} pont
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* If EGYÉNI PÁRBAJ: Show Duelists */}
+            {currentGame.gameType === 'DUEL' && activeDuel && (
+              <div className="flex items-center justify-center gap-8 md:gap-16 my-4">
+                <div className="text-right">
+                  <span className="text-xs font-mono uppercase text-orange-400 block">{teamA.name}</span>
+                  <span className="text-3xl md:text-5xl font-extrabold font-cinzel text-white block">
+                    {playerA?.name || 'A Játékos'}
+                  </span>
+                </div>
+
+                <div className="text-2xl md:text-3xl font-black font-cinzel text-amber-400 px-4 py-2 rounded-2xl bg-zinc-900 border border-amber-500/30">
+                  VS
+                </div>
+
+                <div className="text-left">
+                  <span className="text-xs font-mono uppercase text-purple-400 block">{teamB.name}</span>
+                  <span className="text-3xl md:text-5xl font-extrabold font-cinzel text-white block">
+                    {playerB?.name || 'B Játékos'}
+                  </span>
+                </div>
+              </div>
             )}
           </div>
         ) : (

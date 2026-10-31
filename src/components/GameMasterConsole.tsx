@@ -12,9 +12,11 @@ import {
   Users,
   Award,
 } from 'lucide-react';
-import { GameItem, GameMatch, Player } from '../types/game';
+import { GameItem, GameMatch, Player, PumpkinPair } from '../types/game';
 import { TeamStats } from '../utils/calculations';
 import { soundEngine } from '../utils/sound';
+import { PuzzleGamePanel } from './PuzzleGamePanel';
+import { PumpkinGamePanel } from './PumpkinGamePanel';
 
 interface GameMasterConsoleProps {
   games: GameItem[];
@@ -42,6 +44,20 @@ interface GameMasterConsoleProps {
     totalScore: number,
     playerScores: Record<string, number>
   ) => void;
+  onUpdateMatchData?: (updatedMatch: GameMatch) => void;
+  onFinalizePuzzle?: (
+    scoreA: number,
+    scoreB: number,
+    winnerTeam: 'A' | 'B' | 'DRAW',
+    timeA: number,
+    timeB: number
+  ) => void;
+  onFinalizePumpkin?: (
+    scoreA: number,
+    scoreB: number,
+    winnerTeam: 'A' | 'B' | 'DRAW',
+    pairs: PumpkinPair[]
+  ) => void;
   onOpenHallOfFame: () => void;
   onOpenProjector: () => void;
 }
@@ -62,6 +78,9 @@ export const GameMasterConsole: React.FC<GameMasterConsoleProps> = ({
   onSkipGame,
   onSaveDuelScore,
   onSaveTeamRoundScore,
+  onUpdateMatchData,
+  onFinalizePuzzle,
+  onFinalizePumpkin,
   onOpenHallOfFame,
 }) => {
   const playerMap = new Map<string, Player>();
@@ -461,16 +480,30 @@ export const GameMasterConsole: React.FC<GameMasterConsoleProps> = ({
             <span className="text-zinc-600">·</span>
             <span
               className={`font-mono px-2 py-0.5 rounded text-[10px] font-bold ${
-                isTeamGame
+                currentGame.gameType === 'PUZZLE'
+                  ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/30'
+                  : currentGame.gameType === 'PUMPKIN'
+                  ? 'bg-amber-950/60 text-amber-300 border border-amber-500/30'
+                  : isTeamGame
                   ? 'bg-purple-950/60 text-purple-300 border border-purple-500/30'
                   : 'bg-orange-950/60 text-orange-300 border border-orange-500/30'
               }`}
             >
-              {isTeamGame ? '👥 TELJES CSAPATOS' : '⚔️ EGYÉNI PÁRBAJ'}
+              {currentGame.gameType === 'PUZZLE'
+                ? '🧩 PUZZLE-VERSENY'
+                : currentGame.gameType === 'PUMPKIN'
+                ? '🎃 TÖKFARAGÓ VERSENY'
+                : isTeamGame
+                ? '👥 TELJES CSAPATOS'
+                : '⚔️ EGYÉNI PÁRBAJ'}
             </span>
             <span className="text-zinc-600">·</span>
             <span className="font-mono text-amber-300 font-bold">
-              {isTeamGame
+              {currentGame.gameType === 'PUZZLE'
+                ? 'Párhuzamos stopper'
+                : currentGame.gameType === 'PUMPKIN'
+                ? '4 pár egyidejűleg'
+                : isTeamGame
                 ? activeTeamStage === 'TEAM_A'
                   ? '1. kör (A csapat)'
                   : activeTeamStage === 'TEAM_B'
@@ -583,12 +616,22 @@ export const GameMasterConsole: React.FC<GameMasterConsoleProps> = ({
                   <span className="text-xs text-zinc-500">·</span>
                   <span
                     className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
-                      isTeamGame
+                      currentGame.gameType === 'PUZZLE'
+                        ? 'bg-cyan-950/50 text-cyan-300 border border-cyan-500/30'
+                        : currentGame.gameType === 'PUMPKIN'
+                        ? 'bg-amber-950/50 text-amber-300 border border-amber-500/30'
+                        : isTeamGame
                         ? 'bg-purple-950/50 text-purple-300 border border-purple-500/30'
                         : 'bg-orange-950/50 text-orange-300 border border-orange-500/30'
                     }`}
                   >
-                    {isTeamGame ? '👥 TELJES CSAPATOS' : '⚔️ EGYÉNI PÁRBAJ'}
+                    {currentGame.gameType === 'PUZZLE'
+                      ? '🧩 PUZZLE-VERSENY'
+                      : currentGame.gameType === 'PUMPKIN'
+                      ? '🎃 TÖKFARAGÓ VERSENY'
+                      : isTeamGame
+                      ? '👥 TELJES CSAPATOS'
+                      : '⚔️ EGYÉNI PÁRBAJ'}
                   </span>
                 </div>
                 <h2 className="text-xl md:text-2xl font-bold font-cinzel text-white">
@@ -604,7 +647,7 @@ export const GameMasterConsole: React.FC<GameMasterConsoleProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onSkipGame(currentGame.id)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-zinc-200 text-xs transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-zinc-200 text-xs transition-colors cursor-pointer"
                 title="Játék kihagyása"
               >
                 <SkipForward className="w-3.5 h-3.5" />
@@ -614,9 +657,47 @@ export const GameMasterConsole: React.FC<GameMasterConsoleProps> = ({
           </div>
 
           {/* ======================================================== */}
+          {/* PUZZLE-VERSENY JÁTÉKMENET */}
+          {/* ======================================================== */}
+          {currentGame.gameType === 'PUZZLE' && currentMatch && (
+            <PuzzleGamePanel
+              game={currentGame}
+              match={currentMatch}
+              players={players}
+              teamA={teamA}
+              teamB={teamB}
+              onUpdateMatchData={(updatedMatch) => {
+                if (onUpdateMatchData) onUpdateMatchData(updatedMatch);
+              }}
+              onFinalizePuzzle={(scoreA, scoreB, winner, timeA, timeB) => {
+                if (onFinalizePuzzle) onFinalizePuzzle(scoreA, scoreB, winner, timeA, timeB);
+              }}
+            />
+          )}
+
+          {/* ======================================================== */}
+          {/* TÖKFARAGÓ VERSENY JÁTÉKMENET */}
+          {/* ======================================================== */}
+          {currentGame.gameType === 'PUMPKIN' && currentMatch && (
+            <PumpkinGamePanel
+              game={currentGame}
+              match={currentMatch}
+              players={players}
+              teamA={teamA}
+              teamB={teamB}
+              onUpdateMatchData={(updatedMatch) => {
+                if (onUpdateMatchData) onUpdateMatchData(updatedMatch);
+              }}
+              onFinalizePumpkin={(scoreA, scoreB, winner, pairs) => {
+                if (onFinalizePumpkin) onFinalizePumpkin(scoreA, scoreB, winner, pairs);
+              }}
+            />
+          )}
+
+          {/* ======================================================== */}
           {/* A) TELJES CSAPATOS JÁTÉKMENET (Section 1.A & 3) */}
           {/* ======================================================== */}
-          {isTeamGame && !isMatchComplete && (
+          {currentGame.gameType === 'TEAM' && !isMatchComplete && (
             <div className="space-y-6">
               {/* Team Progress Stepper (A kör -> B kör) */}
               <div className="grid grid-cols-2 gap-4">
@@ -976,7 +1057,7 @@ export const GameMasterConsole: React.FC<GameMasterConsoleProps> = ({
           {/* ======================================================== */}
           {/* B) EGYÉNI PÁRBAJ JÁTÉKMENET (DUEL: 4 Párbaj) */}
           {/* ======================================================== */}
-          {!isTeamGame && activeDuel && !isMatchComplete && (
+          {currentGame.gameType === 'DUEL' && activeDuel && !isMatchComplete && (
             <div className="rounded-2xl p-6 bg-gradient-to-b from-[#1b1226] to-[#110d1a] border border-orange-500/30 shadow-2xl relative overflow-hidden">
               <div className="text-center mb-4">
                 <span className="text-[11px] uppercase font-mono tracking-widest text-orange-400">
@@ -1264,7 +1345,9 @@ export const GameMasterConsole: React.FC<GameMasterConsoleProps> = ({
           {/* ======================================================== */}
           {/* ROUND SUMMARY (Both DUEL and TEAM games) */}
           {/* ======================================================== */}
-          {isMatchComplete && currentMatch && (
+          {(currentGame.gameType === 'TEAM' || currentGame.gameType === 'DUEL') &&
+            isMatchComplete &&
+            currentMatch && (
             <div className="p-8 rounded-3xl bg-gradient-to-b from-[#181024] to-[#0e0a16] border-2 border-amber-500/60 shadow-2xl text-center space-y-6">
               <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-2xl font-cinzel">
                 🎉

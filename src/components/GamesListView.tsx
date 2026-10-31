@@ -105,7 +105,7 @@ export const GamesListView: React.FC<GamesListViewProps> = ({
                 onClick={() => setNewType('TEAM')}
                 className={`p-2.5 rounded-xl border cursor-pointer text-xs transition-all ${
                   newType === 'TEAM'
-                    ? 'bg-purple-950/40 border-purple-500 text-purple-200'
+                    ? 'bg-purple-950/40 border-purple-500 text-purple-200 ring-1 ring-purple-500/50'
                     : 'bg-zinc-900 border-zinc-800 text-zinc-400'
                 }`}
               >
@@ -120,7 +120,7 @@ export const GamesListView: React.FC<GamesListViewProps> = ({
                 onClick={() => setNewType('DUEL')}
                 className={`p-2.5 rounded-xl border cursor-pointer text-xs transition-all ${
                   newType === 'DUEL'
-                    ? 'bg-orange-950/40 border-orange-500 text-orange-200'
+                    ? 'bg-orange-950/40 border-orange-500 text-orange-200 ring-1 ring-orange-500/50'
                     : 'bg-zinc-900 border-zinc-800 text-zinc-400'
                 }`}
               >
@@ -129,6 +129,36 @@ export const GamesListView: React.FC<GamesListViewProps> = ({
                   <span>⚔️ EGYÉNI PÁRBAJ</span>
                 </div>
                 <span className="text-[10px] text-zinc-400 block mt-0.5">1 vs 1 küzdelem 4 párbajban</span>
+              </div>
+
+              <div
+                onClick={() => setNewType('PUZZLE')}
+                className={`p-2.5 rounded-xl border cursor-pointer text-xs transition-all ${
+                  newType === 'PUZZLE'
+                    ? 'bg-cyan-950/40 border-cyan-500 text-cyan-200 ring-1 ring-cyan-500/50'
+                    : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                }`}
+              >
+                <div className="flex items-center gap-1.5 font-bold font-cinzel">
+                  <span>🧩</span>
+                  <span>🧩 PUZZLE-VERSENY</span>
+                </div>
+                <span className="text-[10px] text-zinc-400 block mt-0.5">Párhuzamos stopperverseny</span>
+              </div>
+
+              <div
+                onClick={() => setNewType('PUMPKIN')}
+                className={`p-2.5 rounded-xl border cursor-pointer text-xs transition-all ${
+                  newType === 'PUMPKIN'
+                    ? 'bg-amber-950/40 border-amber-500 text-amber-200 ring-1 ring-amber-500/50'
+                    : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                }`}
+              >
+                <div className="flex items-center gap-1.5 font-bold font-cinzel">
+                  <span>🎃</span>
+                  <span>🎃 TÖKFARAGÓ VERSENY</span>
+                </div>
+                <span className="text-[10px] text-zinc-400 block mt-0.5">4 pár egyszerre farag</span>
               </div>
             </div>
           </div>
@@ -182,7 +212,13 @@ export const GamesListView: React.FC<GamesListViewProps> = ({
               {editingGame.status === 'COMPLETED' ? (
                 <div className="p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-400">
                   <span className="font-bold text-white block">
-                    {editingGame.gameType === 'TEAM' ? '👥 TELJES CSAPATOS' : '⚔️ EGYÉNI PÁRBAJ'}
+                    {editingGame.gameType === 'PUZZLE'
+                      ? '🧩 PUZZLE-VERSENY'
+                      : editingGame.gameType === 'PUMPKIN'
+                      ? '🎃 TÖKFARAGÓ VERSENY'
+                      : editingGame.gameType === 'TEAM'
+                      ? '👥 TELJES CSAPATOS'
+                      : '⚔️ EGYÉNI PÁRBAJ'}
                   </span>
                   <span className="text-[11px] text-amber-400/80">
                     A már befejezett játékok típusa az eredmények épsége miatt nem módosítható.
@@ -194,7 +230,7 @@ export const GamesListView: React.FC<GamesListViewProps> = ({
                     onClick={() => setEditType('TEAM')}
                     className={`p-2 rounded-xl border cursor-pointer text-xs ${
                       editType === 'TEAM'
-                        ? 'bg-purple-950/40 border-purple-500 text-purple-200'
+                        ? 'bg-purple-950/40 border-purple-500 text-purple-200 ring-1 ring-purple-500/50'
                         : 'bg-zinc-900 border-zinc-800 text-zinc-400'
                     }`}
                   >
@@ -204,11 +240,31 @@ export const GamesListView: React.FC<GamesListViewProps> = ({
                     onClick={() => setEditType('DUEL')}
                     className={`p-2 rounded-xl border cursor-pointer text-xs ${
                       editType === 'DUEL'
-                        ? 'bg-orange-950/40 border-orange-500 text-orange-200'
+                        ? 'bg-orange-950/40 border-orange-500 text-orange-200 ring-1 ring-orange-500/50'
                         : 'bg-zinc-900 border-zinc-800 text-zinc-400'
                     }`}
                   >
                     ⚔️ EGYÉNI PÁRBAJ
+                  </div>
+                  <div
+                    onClick={() => setEditType('PUZZLE')}
+                    className={`p-2 rounded-xl border cursor-pointer text-xs ${
+                      editType === 'PUZZLE'
+                        ? 'bg-cyan-950/40 border-cyan-500 text-cyan-200 ring-1 ring-cyan-500/50'
+                        : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                    }`}
+                  >
+                    🧩 PUZZLE-VERSENY
+                  </div>
+                  <div
+                    onClick={() => setEditType('PUMPKIN')}
+                    className={`p-2 rounded-xl border cursor-pointer text-xs ${
+                      editType === 'PUMPKIN'
+                        ? 'bg-amber-950/40 border-amber-500 text-amber-200 ring-1 ring-amber-500/50'
+                        : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                    }`}
+                  >
+                    🎃 TÖKFARAGÓ
                   </div>
                 </div>
               )}
@@ -295,12 +351,22 @@ export const GamesListView: React.FC<GamesListViewProps> = ({
                     {/* Clear Game Type Badge (Section 2) */}
                     <span
                       className={`inline-block text-[10px] font-mono px-2 py-0.5 rounded-md font-bold mt-1 ${
-                        game.gameType === 'TEAM'
+                        game.gameType === 'PUZZLE'
+                          ? 'bg-cyan-950/70 border border-cyan-500/40 text-cyan-300'
+                          : game.gameType === 'PUMPKIN'
+                          ? 'bg-amber-950/70 border border-amber-500/40 text-amber-300'
+                          : game.gameType === 'TEAM'
                           ? 'bg-purple-950/70 border border-purple-500/40 text-purple-300'
                           : 'bg-orange-950/70 border border-orange-500/40 text-orange-300'
                       }`}
                     >
-                      {game.gameType === 'TEAM' ? '👥 TELJES CSAPATOS' : '⚔️ EGYÉNI PÁRBAJ'}
+                      {game.gameType === 'PUZZLE'
+                        ? '🧩 PUZZLE-VERSENY'
+                        : game.gameType === 'PUMPKIN'
+                        ? '🎃 TÖKFARAGÓ VERSENY'
+                        : game.gameType === 'TEAM'
+                        ? '👥 TELJES CSAPATOS'
+                        : '⚔️ EGYÉNI PÁRBAJ'}
                     </span>
                   </div>
                 </div>
