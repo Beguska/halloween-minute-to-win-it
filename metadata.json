@@ -1,0 +1,6 @@
+{
+  "name": "Halloween – Minute to Win It",
+  "description": "Interaktív felnőtt Halloween verseny- és játékmenedzser webalkalmazás, 1 perc és nyersz játékmesteri pulttal, élő pontozással és kivetítővel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

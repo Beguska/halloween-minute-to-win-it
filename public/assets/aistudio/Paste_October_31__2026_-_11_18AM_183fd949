@@ -1,0 +1,919 @@
+# GOOGLE AI STUDIO – TELJES FEJLESZTÉSI PROMPT
+## HALLOWEEN – MINUTE TO WIN IT
+### Interaktív Halloween verseny- és játékmenedzser webalkalmazás
+
+## 1. A PROJEKT CÉLJA
+
+Készíts egy teljesen működőképes, modern, látványos, Halloween tematikájú webalkalmazást, amely egy felnőtteknek szóló „1 perc és nyersz” (Minute to Win It) Halloween-verseny lebonyolítására szolgál.
+
+Az alkalmazást egy játékmester fogja kezelni, aki a játékokat vezényli, elindítja a visszaszámlálót, rögzíti a játékosok pontszámait, és követi a két csapat eredményeit.
+
+A webapp legyen könnyen kezelhető, gyors, látványos, és egyaránt jól használható laptopon, asztali számítógépen, tableten és mobiltelefonon.
+
+**Fontos:** Ne csak egy statikus prototípust vagy dizájntervet készíts! Minden gomb, funkció, sorsolás, időzítő, pontozás, navigáció és eredményösszesítés ténylegesen működjön.
+
+A webalkalmazás neve:
+
+**HALLOWEEN – MINUTE TO WIN IT**
+
+Alcím:
+*The Ultimate Halloween Challenge*
+
+A teljes alkalmazás nyelve magyar legyen.
+
+---
+
+## 2. VIZUÁLIS MEGJELENÉS ÉS DIZÁJN
+
+A megjelenés legyen prémium minőségű, látványos, sötét, misztikus és enyhén horrorisztikus, de ne legyen gyerekes.
+
+Inspiráció:
+- Halloween horrorfilmek.
+- Haunted house hangulat.
+- Sötét kastélyok és kísértetjárta helyszínek.
+- Narancssárga, vérvörös és lila fények.
+- Misztikus köd, parázsló részecskék, árnyékok.
+- Gótikus dekorációk és koponyaelemek.
+
+### Színvilág
+
+- Háttér: nagyon sötét fekete (#0B090D).
+- Másodlagos háttér: sötét grafitszürke (#17131C).
+- Halloween narancs: (#FF7518).
+- Vérvörös: (#D72638).
+- Misztikus lila: (#8B5CF6).
+- Arany: (#F5B942).
+- Szöveg: fehér és világosszürke.
+
+### Grafikai elemek
+
+Használj:
+- Finoman animált ködöt.
+- Lebegő denevéreket.
+- Parázsló részecskéket.
+- Halloween ikonokat.
+- Koponya- és tökgrafikákat.
+- Látványos fény- és árnyékeffektusokat.
+
+Ne terheld túl a felületet animációkkal. A kezelhetőség és az olvashatóság mindig legyen elsődleges.
+
+A gombok legyenek jól láthatók, nagyok, könnyen kezelhetők.
+
+A timer és az eredményjelző legyen különösen hangsúlyos.
+
+---
+
+# 3. INDULÓKÉPERNYŐ – JÁTÉK ELŐKÉSZÍTÉSE
+
+Az alkalmazás megnyitásakor először egy konfigurációs képernyő jelenjen meg.
+
+Ne induljon automatikusan előre feltöltött játékokkal vagy játékosokkal.
+
+A felhasználónak először meg kell adnia a játékok és játékosok nevét.
+
+A kezdőképernyőn két nagy szekció legyen.
+
+## 3.1. Játékok hozzáadása
+
+Legyen egy játéklista, amelyhez korlátlan számú játékot lehet hozzáadni.
+
+Funkciók:
+- Új játék hozzáadása.
+- Játék nevének szerkesztése.
+- Játék törlése.
+- Játékok sorrendjének módosítása.
+- A játékok listázása.
+
+Minden játéknak legyen egyedi azonosítója.
+
+A játék neve legyen kötelező mező.
+
+A játékokhoz opcionálisan lehessen rövid leírást is megadni, amely a játék indítása előtt megjelenik.
+
+Például:
+- Múmia készítés.
+- Szellemvadászat.
+- Vámpírfogó.
+- Pókverseny.
+- Boszorkánykalap-dobáló.
+
+Ezek csak példák, ne legyenek előre feltöltve.
+
+## 3.2. Játékosok hozzáadása
+
+Legyen egy külön játékoskezelő felület.
+
+Alapértelmezés szerint pontosan 8 játékos szükséges, mivel két darab 4 fős csapat fog versenyezni.
+
+Funkciók:
+- Játékos hozzáadása.
+- Játékos nevének módosítása.
+- Játékos törlése.
+- Játékosok listázása.
+- Duplikált nevek figyelmeztetése.
+
+A játékosok teljes neve jelenjen meg mindenhol.
+
+A játékosok kapjanak egyedi belső azonosítót. A sorsolás és a statisztikák ne a név, hanem az egyedi azonosító alapján működjenek.
+
+A játék indítása előtt ellenőrizd, hogy pontosan 8 játékos van-e.
+
+Ha nem 8 játékos van, jelenjen meg egy jól látható figyelmeztetés, és ne lehessen továbblépni.
+
+## 3.3. Tovább a csapatbeosztáshoz
+
+A képernyő alján legyen egy nagy, látványos gomb:
+
+**CSAPATOK KIALAKÍTÁSA**
+
+A gomb csak akkor legyen aktív, ha:
+- Legalább egy játék van felvéve.
+- Pontosan 8 játékos szerepel a listában.
+
+---
+
+# 4. CSAPATOK KIALAKÍTÁSA
+
+Két csapatot kell létrehozni:
+
+- A csapat: 4 játékos.
+- B csapat: 4 játékos.
+
+Két lehetőség legyen.
+
+## 4.1. Véletlenszerű csapatgenerálás
+
+Legyen egy nagy gomb:
+
+**🎲 RANDOM CSAPATGENERÁLÁS**
+
+Kattintáskor:
+- A rendszer keverje össze véletlenszerűen a 8 játékost.
+- Ossza szét őket két darab 4 fős csapatba.
+- Látványos animációval jelenítse meg a csapatokat.
+- A generálás bármikor újraindítható legyen a játék kezdete előtt.
+
+## 4.2. Manuális csapatbeosztás
+
+A felhasználó drag-and-drop módszerrel vagy megfelelő áthelyező gombokkal is be tudja osztani a játékosokat.
+
+Követelmények:
+- Mindkét csapatba pontosan 4 játékos kerüljön.
+- Egy játékos csak egy csapatban szerepelhet.
+- Egy játékos nem maradhat besorolatlanul a játék indításakor.
+
+## 4.3. Csapatnevek automatikus létrehozása
+
+A csapat neve automatikusan a négy játékos keresztnevének első betűiből álljon össze.
+
+Példa:
+
+Anna, Béla, Csilla, Dávid → **ABCD TEAM**
+
+Péter, Éva, Gábor, Zoli → **PEGZ TEAM**
+
+A csapatnevek automatikusan frissüljenek, ha a csapatbeosztás megváltozik.
+
+A felhasználó opcionálisan átnevezhesse a csapatokat, de az automatikusan generált név legyen az alapértelmezett.
+
+Ha több játékosnak azonos kezdőbetűje van, akkor is mind a négy betű szerepeljen.
+
+## 4.4. Csapatbeosztás véglegesítése
+
+Legyen egy:
+
+**CSAPATOK JÓVÁHAGYÁSA ÉS JÁTÉK INDÍTÁSA**
+
+gomb.
+
+A játék elindítása után a csapatbeosztás ne változzon automatikusan.
+
+A játékosok áthelyezése csak egy külön megerősítést igénylő újrakezdési vagy adminisztrációs művelettel legyen lehetséges.
+
+---
+
+# 5. FŐ DASHBOARD – JÁTÉKMESTERI VEZÉRLŐPULT
+
+A csapatbeosztás után a felhasználó a fő dashboardra érkezzen.
+
+Ez legyen az alkalmazás központi kezelőfelülete.
+
+A dashboard tetején mindig jelenjen meg:
+
+- Az alkalmazás neve.
+- Aktuális játék neve.
+- Hányadik játék következik.
+- Hány játék van még hátra.
+- Az aktuális párbaj sorszáma a négyből.
+
+## 5.1. Élő eredményjelző
+
+A dashboard felső részén folyamatosan látszódjon a két csapat eredménye.
+
+Két nagy, egymással összehasonlítható eredménykártya legyen.
+
+Például:
+
+ABC TEAM — 128 PONT
+
+PEGZ TEAM — 115 PONT
+
+A kártyákon jelenjen meg:
+- Csapat neve.
+- Csapattagok neve.
+- Összesített pontszám.
+- Megnyert játékok száma.
+- Megnyert párbajok száma.
+
+A vezető csapat kapjon látványos kiemelést, például arany vagy narancssárga fénykeretet.
+
+A másik csapat maradjon jól látható.
+
+A pontszámok minden pontmódosításkor azonnal frissüljenek.
+
+A két csapat közötti pontkülönbség is legyen látható.
+
+Döntetlen esetén jelenjen meg egy látványos „DÖNTETLEN” felirat.
+
+## 5.2. Fő navigáció
+
+Legyenek jól elkülöníthető menüpontok:
+
+1. Játékmesteri dashboard.
+2. Játéklista.
+3. Csapatok és játékosok.
+4. Élő scoreboard.
+5. Részletes statisztikák.
+6. Hall of Fame.
+7. Beállítások.
+
+---
+
+# 6. JÁTÉK KISORSOLÁSA
+
+A dashboardon legyen egy kiemelt gomb:
+
+**🎲 KÖVETKEZŐ JÁTÉK KISORSOLÁSA**
+
+Kattintáskor a rendszer véletlenszerűen válasszon egy olyan játékot, amelyet még nem játszottak le.
+
+A kisorsolás látványos animációval történjen.
+
+A kiválasztott játék jelenjen meg nagy méretben, Halloween-grafikával.
+
+A játék nevét jól olvashatóan mutassa.
+
+A játéklistában minden játéknál legyen státusz:
+
+- Még nem játszott.
+- Folyamatban.
+- Befejezett.
+- Kihagyott.
+
+A már befejezett játék ne kerüljön bele újra az automatikus sorsolásba.
+
+Legyen lehetőség egy játék kézi kiválasztására is.
+
+Legyen lehetőség egy játék kihagyására.
+
+Ha minden játék befejeződött vagy kihagyásra került, jelenjen meg a játék vége és az eredményhirdetés lehetősége.
+
+**Fontos:** egy játék akkor számít befejezettnek, ha mind a négy párbaj eredménye rögzítve lett. Nem akkor, amikor az első vagy a második csapat pontjait rögzítették.
+
+---
+
+# 7. JÁTÉKOSOK KISORSOLÁSA – NÉGY PÁRBAJ
+
+Ez az alkalmazás egyik legfontosabb funkciója.
+
+Minden kisorsolt játék során pontosan négy párbajt kell lebonyolítani.
+
+Mindegyik párbajban:
+- Az A csapatból egy játékos vesz részt.
+- A B csapatból egy játékos vesz részt.
+- A két játékos egymás ellen versenyez.
+
+## 7.1. Véletlenszerű játékoskiválasztás
+
+Az aktuális játék kiválasztása után legyen egy gomb:
+
+**🎲 PÁRBAJ RÉSZTVEVŐINEK KISORSOLÁSA**
+
+A rendszer:
+1. Véletlenszerűen keverje össze az A csapat négy játékosát.
+2. Véletlenszerűen keverje össze a B csapat négy játékosát.
+3. Az első két játékost párosítsa.
+4. A második két játékost párosítsa.
+5. Folytassa a negyedik párbajig.
+
+A sorsolás eredményét a négy párbajhoz előre készítse el, de egyszerre csak az aktuális párbaj résztvevőit jelenítse meg.
+
+Példa:
+
+| Párbaj | A csapat | B csapat |
+|---|---|---|
+| 1. | Anna | Péter |
+| 2. | Béla | Éva |
+| 3. | Csilla | Gábor |
+| 4. | Dávid | Zoli |
+
+A tényleges neveket természetesen mindig a valódi csapattagok közül válassza ki.
+
+## 7.2. Szigorú sorsolási szabályok
+
+- Egy játékos egy adott játék során pontosan egyszer szerepelhet.
+- Egy játékos nem játszhat kétszer ugyanabban a játékban.
+- Minden csapattag pontosan egy párbajban vesz részt az adott játék során.
+- A négy párbaj mindegyikében mindkét csapatból pontosan egy játékos szerepel.
+- Egy következő játékban minden játékos ismét kisorsolható.
+- A sorsolás ne eredményezzen ismétlődő játékospárosítást ugyanazon játékon belül.
+
+## 7.3. Párbaj megjelenítése
+
+A kiválasztott játékosok nagy, látványos kártyákon jelenjenek meg.
+
+Két oldalról érkezzenek a képernyőre, középen VS felirattal.
+
+Például:
+
+ANNA
+
+< VS >
+
+PÉTER
+
+Legyen jól látható:
+- A csapat neve.
+- A játékos neve.
+- A párbaj száma.
+- Az aktuális játék neve.
+
+A résztvevők megjelenítése után legyen egy nagy gomb:
+
+**PÁRBAJ INDÍTÁSA**
+
+---
+
+# 8. DRAMATIKUS VISSZASZÁMLÁLÓ – TIMER
+
+Ez az alkalmazás egyik leglátványosabb eleme.
+
+A timer alapértelmezett értéke mindig 60 másodperc legyen.
+
+## 8.1. Idő beállítása
+
+A timer mellett legyen két nagy gomb:
+
+- − 5 MÁSODPERC
+- + 5 MÁSODPERC
+
+Minden kattintás pontosan 5 másodperccel csökkentse vagy növelje az időt.
+
+Például:
+- 60 másodperc.
+- 65 másodperc.
+- 70 másodperc.
+- 55 másodperc.
+- 50 másodperc.
+
+A timer minimuma 5 másodperc legyen.
+
+A beállított idő a következő párbajra is érvényes maradjon, amíg a játékmester meg nem változtatja.
+
+Legyen egy külön visszaállítás gomb, amely visszaállítja a 60 másodpercet.
+
+## 8.2. Timer megjelenése
+
+A visszaszámláló legyen óriási méretű, középen elhelyezve.
+
+Például:
+
+# 01:00
+
+A timer dizájnja:
+- Digitális, futurisztikus számok.
+- Narancssárga és vörös fények.
+- Animált külső kör vagy progress bar.
+- Finom pulzálás.
+- Sötét háttér.
+
+## 8.3. Visszaszámlálás
+
+Legyenek vezérlőgombok:
+- START.
+- PAUSE.
+- FOLYTATÁS.
+- ÚJRAINDÍTÁS.
+
+A timer valódi idő alapján működjön, ne pusztán másodpercenkénti számlálóval, amely háttérbe kerüléskor pontatlanná válhat.
+
+Az időtartamot időbélyegek alapján számolja.
+
+Ha a böngészőablak háttérbe kerül, a visszaszámlálás akkor is pontos maradjon.
+
+## 8.4. Az utolsó 10 másodperc
+
+Amikor a visszaszámlálás eléri a 10 másodpercet:
+- A háttér váltson vöröses színre.
+- A timer kezdjen gyorsan villogni.
+- A számok pulzáljanak.
+- Gyorsuló hangjelzések szólaljanak meg.
+- A vizuális effektus legyen egyre intenzívebb.
+
+## 8.5. Amikor lejár az idő
+
+Amikor a timer eléri a nullát:
+- A visszaszámlálás álljon le.
+- A kijelzőn jelenjen meg egy hatalmas „TIME'S UP!” felirat.
+- Szólaljon meg egy erőteljes gong vagy horrorisztikus haranghang.
+- Jelenjen meg egy rövid képernyőanimáció.
+- A pontozópanel automatikusan nyíljon meg.
+
+A hangokat a böngészőben működő hangrendszerrel vagy megfelelő hangfájlokkal valósítsd meg.
+
+Legyen hangerőszabályozás és némítási lehetőség.
+
+Az első felhasználói interakció során aktiváld a hangrendszert, hogy a böngésző hangkorlátozásai ne akadályozzák a hangjelzéseket.
+
+---
+
+# 9. PONTOZÓPANEL
+
+A timer lejárta után automatikusan jelenjen meg egy nagy, jól áttekinthető pontozópanel.
+
+A két játékos neve és csapata egyértelműen legyen feltüntetve.
+
+Például:
+
+ANNA – ABC TEAM
+
+PÉTER – PEGZ TEAM
+
+Mindkét játékos mellett külön pontbeviteli mező legyen.
+
+A játékmester tetszőleges nemnegatív egész pontszámot adhasson meg, alapértelmezés szerint 0–100 közötti tartományban.
+
+Legyen:
+- Pontszám megadása.
+- Pontszám növelése.
+- Pontszám csökkentése.
+- Pontszám módosítása mentés előtt.
+
+A pontozás ne legyen kizárólag a párbaj győztesére korlátozva. Mindkét játékos kaphasson pontot.
+
+A két játékos pontszáma külön-külön kerüljön mentésre.
+
+## 9.1. Automatikus pontösszesítés
+
+A pontok mentésekor a rendszer automatikusan:
+- Hozzáadja az adott játékos egyéni pontjaihoz.
+- Hozzáadja az adott játékos csapatának összpontszámához.
+- Frissíti az élő eredményjelzőt.
+- Frissíti az egyéni statisztikákat.
+- Rögzíti a párbaj eredményét.
+
+A pontokat tilos kétszer hozzáadni.
+
+A mentés legyen tranzakciós jellegű: egy párbaj eredményét csak egyszer lehessen véglegesíteni.
+
+Ha egy korábban rögzített eredményt módosítanak, az összesített eredményeket az új adatokból újra kell számolni, nem pedig újra hozzáadni az eredményt.
+
+## 9.2. Párbaj győztesének meghatározása
+
+A magasabb pontszámot elérő játékos nyeri a párbajt.
+
+A győztes kapjon egyéni párbajgyőzelmet.
+
+Döntetlen esetén egyik játékos se kapjon párbajgyőzelmet.
+
+A döntetlen külön státuszként jelenjen meg.
+
+A pontozás mentése után jelenjen meg:
+
+**EREDMÉNY MENTÉSE ÉS KÖVETKEZŐ PÁRBAJ**
+
+A gomb csak akkor legyen aktív, ha mindkét játékos pontszáma meg lett adva.
+
+---
+
+# 10. A NÉGY PÁRBAJ LEBONYOLÍTÁSA
+
+Minden játék pontosan négy párbajból áll.
+
+A párbajok eredményei külön-külön mentésre kerüljenek.
+
+A dashboardon jelenjen meg egy haladási jelző:
+
+- 1/4 párbaj.
+- 2/4 párbaj.
+- 3/4 párbaj.
+- 4/4 párbaj.
+
+A befejezett párbajokat zöld vagy arany jelölés mutassa.
+
+A következő párbaj résztvevőit automatikusan jelenítse meg a rendszer.
+
+A játékosokat ne sorsolja ki újra minden párbaj előtt: a teljes négyes párosítás már az aktuális játék kezdetekor legyen rögzítve.
+
+## 10.1. Az adott játék lezárása
+
+Amikor a negyedik párbaj pontszámai is mentésre kerültek:
+- Az adott játék státusza legyen „Befejezett”.
+- Számolja össze mindkét csapat négy-négy játékosának pontjait.
+- Mutassa meg az adott játék csapatonkénti eredményét.
+- Mutassa meg az adott játék egyéni eredményeit.
+- Határozza meg az adott játék győztes csapatát.
+
+A játék győztese az a csapat, amelynek négy játékosa együttesen több pontot szerzett.
+
+Ha a két csapat összpontszáma azonos, az adott játék döntetlen legyen. Mindkét csapat kapjon fél győzelmet az összesített játékgyőzelmi statisztikában.
+
+A játék lezárása után jelenjen meg:
+
+**KÖVETKEZŐ JÁTÉK KISORSOLÁSA**
+
+Ezután folytatódjon a verseny.
+
+---
+
+# 11. JÁTÉKONKÉNTI RÉSZLETES EREDMÉNYTÁBLA
+
+Legyen külön menüpont, ahol minden eddigi játék eredménye megtekinthető.
+
+A táblázat tartalmazza:
+
+| Játék | ABC TEAM | PEGZ TEAM | Győztes |
+|---|---:|---:|---|
+| 1. játék | 28 | 29 | PEGZ TEAM |
+| 2. játék | 35 | 31 | ABC TEAM |
+| 3. játék | 26 | 26 | Döntetlen |
+
+A tényleges adatokat mindig a mentett eredményekből számolja.
+
+Egy játékra kattintva lehessen megtekinteni:
+- A négy párbajt.
+- Az összes résztvevőt.
+- Minden játékos pontszámát.
+- A párbajok győzteseit.
+- A csapatok összesített pontjait.
+- Az adott játék győztesét.
+
+A korábbi játékok eredményei legyenek visszanézhetők.
+
+A játékmester szükség esetén javíthassa a korábbi pontszámokat.
+
+A javítás után minden érintett összesítés automatikusan frissüljön.
+
+---
+
+# 12. SCOREBOARD – CSAPAT- ÉS EGYÉNI RANGLISTA
+
+Készíts külön, látványos eredményjelző képernyőt.
+
+Két fő nézet legyen.
+
+## 12.1. Csapatranglista
+
+Mutassa:
+- Csapat neve.
+- Összes megszerzett pont.
+- Megnyert játékok száma.
+- Döntetlen játékok száma.
+- Megnyert párbajok száma.
+- Pontkülönbség.
+
+A két csapat eredménye folyamatosan frissüljön.
+
+## 12.2. Egyéni ranglista
+
+Minden játékos külön sorban szerepeljen.
+
+Oszlopok:
+- Helyezés.
+- Játékos neve.
+- Csapat.
+- Összes megszerzett pont.
+- Lejátszott párbajok száma.
+- Megnyert párbajok száma.
+- Párbajgyőzelmi arány.
+- Átlagpontszám.
+
+A ranglista az összes megszerzett pont alapján legyen sorba rendezve.
+
+A holtversenyeket kezelje megfelelően.
+
+A ranglista bármikor megnyitható legyen játék közben.
+
+---
+
+# 13. HALLOWEEN HALL OF FAME – VÉGSŐ EREDMÉNYHIRDETÉS
+
+Ez legyen a játék lezárásának leglátványosabb része.
+
+A dashboardon legyen egy:
+
+**🏆 JÁTÉK VÉGE – EREDMÉNYHIRDETÉS**
+
+gomb.
+
+Kattintáskor jelenjen meg egy megerősítő ablak, amely figyelmeztet, ha vannak még be nem fejezett játékok.
+
+A végső eredményhirdetés előtt az összesített statisztikák frissüljenek a tényleges mentett eredményekből.
+
+## 13.1. Győztes csapat
+
+A legtöbb összesített pontot elérő csapat nyerje a versenyt.
+
+Jelenjen meg:
+- Győztes csapat neve.
+- Összes pontja.
+- Megnyert játékok száma.
+- Megnyert párbajok száma.
+
+Döntetlen esetén mindkét csapat legyen közös győztes.
+
+## 13.2. Egyéni díjak – Halloween Hall of Fame
+
+Öt külön díjkategória legyen.
+
+**1. 🥇 A Halloween pontkirálya**
+
+Az a játékos, aki az összes játék során a legtöbb pontot szerezte.
+
+**2. 🎯 A legjobb átlagteljesítmény**
+
+Az a játékos, akinek a legmagasabb az egy párbajra jutó átlagpontszáma.
+
+Az átlag számítása:
+
+Összes megszerzett pont / lejátszott párbajok száma.
+
+Csak olyan játékos legyen jogosult erre a díjra, aki legalább egy párbajt teljesített.
+
+**3. 🔥 A párbajok királya**
+
+Az a játékos, aki a legtöbb párbajt nyerte meg.
+
+**4. 👻 A legszorosabb párbaj**
+
+Az a párbaj, amelyben a két játékos pontszáma közötti különbség a legkisebb.
+
+Mutassa meg:
+- A játék nevét.
+- A két játékos nevét.
+- Mindkét játékos pontszámát.
+- A pontkülönbséget.
+
+**5. 🏆 A Halloween bajnokcsapata**
+
+A legtöbb összpontszámot elérő csapat.
+
+Ha valamelyik díjkategóriában holtverseny van, minden érintett játékos jelenjen meg.
+
+A legszorosabb párbaj díja esetén minden azonos legkisebb pontkülönbségű párbaj megjelenhet.
+
+## 13.3. Végső animáció
+
+Az eredményhirdetés legyen teljes képernyős, látványos esemény.
+
+- Sötét, misztikus háttér.
+- Arany és narancssárga fények.
+- Animált trófea.
+- Konfetti és parázsló részecskék.
+- Látványos győztescsapat-felirat.
+- Díjak egymás utáni megjelenítése.
+- Ünnepélyes Halloween-hanghatások.
+
+Legyen lehetőség az eredmények újbóli megtekintésére.
+
+A végső eredményhirdetés ne törölje az adatokat.
+
+---
+
+# 14. BEÁLLÍTÁSOK ÉS JÁTÉKVEZÉRLÉS
+
+Legyen egy külön beállítási oldal.
+
+Tartalmazza:
+
+- Hang be- és kikapcsolása.
+- Hangerő szabályozása.
+- Timer alapértelmezett értéke.
+- Timer visszaállítása 60 másodpercre.
+- Teljes képernyős megjelenítés.
+- Eredményjelző kivetítési módja.
+- Sötét Halloween-téma.
+- Új játék kezdése.
+- Verseny teljes újraindítása.
+
+A teljes újraindítás csak külön megerősítés után történhessen.
+
+---
+
+# 15. ADATMENTÉS ÉS HIBAKEZELÉS
+
+Kiemelten fontos, hogy az alkalmazás ne veszítse el a játék közben rögzített eredményeket.
+
+Használj automatikus, tartós helyi mentést, például localStorage-t vagy IndexedDB-t.
+
+Az alkalmazás:
+- Mentse a játéklistát.
+- Mentse a játékosokat.
+- Mentse a csapatbeosztást.
+- Mentse a kisorsolt párbajokat.
+- Mentse az aktuális játék állapotát.
+- Mentse a timer állapotát és a hátralévő időt.
+- Mentse a pontszámokat.
+- Mentse a teljes eredménytáblát.
+
+Böngészőfrissítés után az alkalmazás álljon vissza a legutolsó mentett állapotra.
+
+A timer a tényleges időbélyegek alapján folytatódjon.
+
+Legyen automatikus mentés minden fontos módosítás után.
+
+## 15.1. Adatbiztonsági funkciók
+
+Legyen:
+- Eredmények exportálása JSON formátumban.
+- Eredmények exportálása CSV formátumban.
+- Korábbi mentés importálása JSON fájlból.
+- Teljes verseny újraindítása külön megerősítéssel.
+
+Az importáláskor ellenőrizze az adatstruktúrát.
+
+A hibás fájlok ne írhassák felül az érvényes adatokat.
+
+---
+
+# 16. TECHNIKAI ELVÁRÁSOK
+
+Használj modern frontend technológiát.
+
+Javasolt technológia:
+- React.
+- TypeScript.
+- Modern CSS vagy Tailwind CSS.
+- Lucide ikonok.
+- CSS animációk.
+- Web Audio API a hangjelzésekhez.
+
+A kód legyen komponensekre bontott, átlátható és karbantartható.
+
+A játékállapotot központilag kezeld.
+
+A számított értékeket ne tárold egymástól függetlenül, hanem a mentett alapadatokból számold újra.
+
+Különösen ügyelj arra, hogy:
+- A pontszámok ne duplázódjanak.
+- A párbajok ne ismétlődjenek.
+- Egy játékos ne kerülhessen kétszer ugyanabba a játékba.
+- A csapatokban mindig pontosan négy játékos legyen.
+- A befejezett játék ne kerüljön újra véletlenszerű kiválasztásra.
+- A timer pontosan működjön.
+- Az eredményhirdetés ne veszítsen adatot.
+
+Ne használj olyan funkciót, amelyhez fizetős API vagy kötelező külső szolgáltatás szükséges.
+
+Az alkalmazás alapvető működése internetkapcsolat nélkül is legyen biztosított, miután betöltődött.
+
+---
+
+# 17. KÉPERNYŐMÉRETEK ÉS KIVETÍTÉSI MÓD
+
+A webapp legyen reszponzív.
+
+Asztali gépen:
+- Kétoszlopos dashboard.
+- Nagyméretű csapatkártyák.
+- Központi timer.
+- Részletes táblázatok.
+
+Tableten:
+- Egyszerűsített kétoszlopos vagy egymás alatti elrendezés.
+
+Mobilon:
+- Egymás alatti kártyák.
+- Nagy érintési felületek.
+- Jól olvasható timer.
+- Könnyen kezelhető pontbeviteli mezők.
+
+Különösen fontos egy **KIVETÍTÉSI MÓD**.
+
+Ez egy letisztult, teljes képernyős nézet legyen, amely egy tévén vagy projektoron jól látható.
+
+Ebben jelenjen meg:
+- Két csapat neve.
+- Élő csapateredmények.
+- Aktuális játék neve.
+- Aktuális két játékos neve.
+- Óriási visszaszámláló.
+- Párbaj állása.
+
+A játékmesteri vezérlőgombok maradjanak a normál kezelőfelületen.
+
+---
+
+# 18. A TELJES ALKALMAZÁS MŰKÖDÉSI FOLYAMATA
+
+A következő folyamatot valósítsd meg:
+
+1. Az alkalmazás elindul.
+2. A felhasználó megadja a játékok neveit.
+3. A felhasználó megadja a 8 játékos nevét.
+4. A felhasználó manuálisan vagy véletlenszerűen létrehozza a két 4 fős csapatot.
+5. A rendszer létrehozza a csapatneveket.
+6. A felhasználó jóváhagyja a csapatokat.
+7. Megnyílik a játékmesteri dashboard.
+8. A játékmester kisorsolja az első játékot.
+9. A rendszer kisorsolja mind a négy párbaj résztvevőit.
+10. Megjelenik az első párbaj két játékosa.
+11. A játékmester elindítja a timert.
+12. A timer visszaszámol 60 másodpercről, vagy a beállított értékről.
+13. Az utolsó 10 másodpercben aktiválódnak a drámai effektek.
+14. Az idő lejártakor megszólal a gong.
+15. Automatikusan megjelenik a pontozópanel.
+16. A játékmester rögzíti mindkét játékos pontszámát.
+17. A rendszer automatikusan frissíti az egyéni és csapateredményeket.
+18. Következik a második párbaj.
+19. A folyamat megismétlődik a negyedik párbajig.
+20. A negyedik párbaj után lezárul az aktuális játék.
+21. Megjelenik az adott játék eredményösszesítése.
+22. A játékmester kisorsolja a következő játékot.
+23. A teljes folyamat ismétlődik.
+24. Az összes játék befejezése után megjelenik a Hall of Fame.
+25. A rendszer kihirdeti a győztes csapatot és az egyéni díjazottakat.
+
+---
+
+# 19. FONTOS FEJLESZTÉSI SZABÁLYOK
+
+Ezeket különösen fontos betartani:
+
+**1. Ne készíts csak látványtervet!**
+A teljes alkalmazás működjön ténylegesen.
+
+**2. Ne használj előre beégetett játékosokat vagy eredményeket.**
+Minden adatot a felhasználó adjon meg.
+
+**3. A négy párbaj résztvevőit előre sorsold ki.**
+Így garantálható, hogy minden játékos pontosan egyszer szerepeljen.
+
+**4. A pontozás automatikusan frissítse az eredményeket.**
+Ne kelljen külön csapatpontokat számolni.
+
+**5. A timer ne álljon meg pontatlanul a böngésző háttérbe kerülésekor.**
+
+**6. A játék lezárása csak a négy párbaj eredményének rögzítése után történjen.**
+
+**7. A teljes eredményadatbázis maradjon meg frissítés után is.**
+
+**8. A játék végén minden statisztika a tényleges eredményekből számolódjon.**
+
+**9. Minden interaktív elemnek legyen valódi funkciója.**
+Ne maradjanak működés nélküli vagy csak dekoratív gombok.
+
+**10. Az alkalmazás teljes felülete legyen magyar nyelvű.**
+
+---
+
+# 20. FEJLESZTÉS ÉS TESZTELÉS
+
+Először építsd fel az alkalmazás teljes struktúráját és adatmodelljét.
+
+Ezután implementáld a funkciókat.
+
+A fejlesztés végén ellenőrizd az alábbi teszteseteket:
+
+- Nyolc játékos megfelelő csapatbeosztása.
+- Négy játékos mindkét csapatban.
+- Véletlenszerű csapatgenerálás.
+- Manuális csapatbeosztás.
+- Játékok hozzáadása, szerkesztése és törlése.
+- Játékok véletlenszerű kiválasztása.
+- Négy párbaj helyes kisorsolása.
+- Egy játékos csak egyszer szerepeljen egy játékban.
+- Timer 60 másodperces alapértékkel.
+- Timer plusz és mínusz 5 másodperces állítása.
+- Utolsó 10 másodperc vizuális és hanghatásai.
+- Gong a timer lejártakor.
+- Pontszámok mentése.
+- Pontok automatikus összesítése.
+- Korábbi pontszámok módosítása.
+- Döntetlenek kezelése.
+- Egyéni és csapatranglista.
+- Hall of Fame statisztikák.
+- Böngészőfrissítés utáni adatvisszaállítás.
+- Exportálás és importálás.
+
+A teszteléshez használhatsz ideiglenes tesztadatokat, de ezeket ne hagyd benne az alkalmazás induló állapotában.
+
+## VÉGSŐ ELVÁRÁS
+
+Egy komplett, prémium megjelenésű, stabil, élvezetes, könnyen kezelhető Halloween Minute to Win It webalkalmazást készíts.
+
+A felület legyen olyan látványos, mintha egy Halloween-verseny televíziós játékmesteri vezérlőpultját használnánk.
+
+A timer, a csapateredmények, a játékoskisorsolás és a Hall of Fame kapja a legnagyobb vizuális hangsúlyt.
+
+**Ne állj meg a kezdőképernyő elkészítésénél. Valósítsd meg az összes fent felsorolt funkciót, és a végén ellenőrizd, hogy a teljes játékfolyamat az első játékos felvitelétől a végső eredményhirdetésig működik.**
